@@ -12,6 +12,7 @@ features = earthquake[['lat', 'lon', 'depthKm', 'magnitude']]
 
 scaler = StandardScaler()
 scaled_features = scaler.fit_transform(features)
+# lowk googled this im still not sure how this thing works
 
 kmeans = KMeans(n_clusters=5, random_state=42, n_init=10)
 kmeans.fit(scaled_features)
@@ -25,12 +26,15 @@ def predict_cluster(latitude, longitude, depth, magnitude):
     cluster_label = kmeans.predict(scaled_input)
     return cluster_label[0]
 
+# also googled this, probably needs so much more tweaking
+
 
 def export_clustered_earthquakes(dataframe, output_path):
     export_df = dataframe.copy()
     export_df["nearby_cities"] = export_df["nearby_cities"].apply(lambda cities: "; ".join(cities))
     export_df.to_csv(output_path, index=False)
 
+    # basically just cleans up the nearby cities list so it looks nicer in the csv, also exports the data to a csv file in output dir
 
 if __name__ == "__main__":
     output_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("data")
@@ -38,4 +42,5 @@ if __name__ == "__main__":
 
     export_clustered_earthquakes(earthquake, csv_output)
     print(predict_cluster(35.0, 135.0, 10.0, 6.2))
+    # test line
     print(f"Saved clustered data to {csv_output}")

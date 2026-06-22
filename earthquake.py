@@ -19,15 +19,22 @@ def haversine(lat1, lon1, lat2, lon2):
     return d
 
 
-def cities_within_radius(lat, lon, radius_km=50):
+def cities_within_radius(lat, lon, radius_km=100):
     distances = haversine(lat, lon, cities["lat"].to_numpy(), cities["lng"].to_numpy())
     nearby_cities = cities.loc[distances <= radius_km, "city_clean"].tolist()
-    return nearby_cities
+    total_population = int(cities.loc[distances <= radius_km, "population"].sum())
+    return nearby_cities, total_population
 
 
-earthquake["nearby_cities"] = earthquake.apply(
+
+metrics = earthquake.apply(
     lambda row: cities_within_radius(row["lat"], row["lon"]),
     axis=1,
 )
 
+
+
+
+earthquake["nearby_cities"] = [m[0] for m in metrics]
 earthquake["nearby_city_count"] = earthquake["nearby_cities"].apply(len)
+earthquake["total_nearby_population"] = [m[1] for m in metrics]

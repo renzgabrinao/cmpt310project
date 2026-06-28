@@ -17,6 +17,9 @@ This model will assist emergency response teams' decision making process by prov
 - [Earthquake Dataset](https://huggingface.co/datasets/LoneWolfgang/japan-major-earthquakes)
 - [Japan Cities Database](https://simplemaps.com/data/jp-citieshttps://www.e-stat.go.jp/en/dbview?sid=0004050417)
 
+### Japan Coastline
+- [Marineregions](https://www.marineregions.org/gazetteer.php/gazetteer.php?p=details&id=5658)
+
 
 ### Tools, API Documentation
 - [Scikit Learn](https://scikit-learn.org/stable/api/sklearn.html)

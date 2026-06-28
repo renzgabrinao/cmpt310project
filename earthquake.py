@@ -1,5 +1,5 @@
 from datasets import load_dataset
-import numpy as np
+from formulas import haversine
 from data import cities
 
 earthquake_data = load_dataset("LoneWolfgang/japan-major-earthquakes")
@@ -7,16 +7,7 @@ earthquake_data = load_dataset("LoneWolfgang/japan-major-earthquakes")
 earthquake = earthquake_data["train"].to_pandas()[["lat", "lon", "depthKm", "magnitude"]]
 
 
-def haversine(lat1, lon1, lat2, lon2):
-    R = 6371
 
-    dLat = np.radians(lat2 - lat1)
-    dLon = np.radians(lon2 - lon1)
-
-    a = np.sin(dLat / 2) ** 2 + np.cos(np.radians(lat1)) * np.cos(np.radians(lat2)) * np.sin(dLon / 2) ** 2
-    c = 2 * np.arctan2(np.sqrt(a), np.sqrt(1 - a))
-    d = R * c
-    return d
 
 
 def cities_within_radius(lat, lon, radius_km=100):

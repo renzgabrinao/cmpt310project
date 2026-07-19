@@ -1,5 +1,5 @@
 from datasets import load_dataset
-from formulas import haversine
+from formulas import haversine, mag2e
 from data import cities
 from coast import signed_dist
 
@@ -19,7 +19,7 @@ metrics = earthquake.apply(
     axis=1,
 )
 
-earthquake["seismic_energy"] = 10 ** (1.5 * earthquake["magnitude"])
+earthquake["seismic_energy"] = mag2e(earthquake["magnitude"])
 earthquake["nearby_cities"] = [m[0] for m in metrics]
 earthquake["nearby_city_count"] = earthquake["nearby_cities"].apply(len)
 earthquake["total_nearby_population"] = [m[1] for m in metrics]

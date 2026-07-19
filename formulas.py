@@ -1,6 +1,6 @@
 import numpy as np
 
-def haversine(lat1, lon1, lat2, lon2):
+def haversine(lat1, lon1, lat2, lon2): # haversine distance (in km)
     R = 6371
 
     dLat = np.radians(lat2 - lat1)
@@ -11,5 +11,5 @@ def haversine(lat1, lon1, lat2, lon2):
     d = R * c
     return d
 
-def mag2e(mag):
+def mag2e(mag): # magnitude to seismic energy
     return 10 ** (1.5 * mag)

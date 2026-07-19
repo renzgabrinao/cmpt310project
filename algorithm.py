@@ -5,14 +5,28 @@ import sys
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 
-from earthquake import earthquake
+from coast import signed_dist
+from earthquake import earthquake, cities_within_radius
+from formulas import mag2e
 
+features = earthquake[
+    [
+        'lat',
+        'lon',
+        'depthKm',
+        'seismic_energy',
+        'coast_distance',
+        'total_nearby_population',
+    ]
+]
 
-features = earthquake[['lat', 'lon', 'depthKm', 'magnitude']]
+# train/val split here before scaling
+# However a quick google search seems to say that Unsupervised learning does not usually need a train/val split
 
 scaler = StandardScaler()
 scaled_features = scaler.fit_transform(features)
 # lowk googled this im still not sure how this thing works
+# preetty sure it calculates the stddev and avg then scales everything around avg with the stddev≈1
 
 kmeans = KMeans(n_clusters=5, random_state=42, n_init=10)
 kmeans.fit(scaled_features)
@@ -21,7 +35,10 @@ earthquake["cluster"] = kmeans.labels_
 
 
 def predict_cluster(latitude, longitude, depth, magnitude):
-    input_features = [[latitude, longitude, depth, magnitude]]
+    _, nearby_population = cities_within_radius(latitude, longitude)
+    seismic_energy = mag2e(magnitude)
+    coast_distance = signed_dist(longitude, latitude)
+    input_features = [[latitude, longitude, depth, seismic_energy, coast_distance, nearby_population]]
     scaled_input = scaler.transform(input_features)
     cluster_label = kmeans.predict(scaled_input)
     return cluster_label[0]
@@ -41,6 +58,7 @@ if __name__ == "__main__":
     csv_output = output_dir / "earthquakes_clustered.csv"
 
     export_clustered_earthquakes(earthquake, csv_output)
+
     print(predict_cluster(35.0, 135.0, 10.0, 6.2))
     # test line
     print(f"Saved clustered data to {csv_output}")

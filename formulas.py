@@ -10,3 +10,6 @@ def haversine(lat1, lon1, lat2, lon2):
     c = 2 * np.arctan2(np.sqrt(a), np.sqrt(1 - a))
     d = R * c
     return d
+
+def mag2e(mag):
+    return 10 ** (1.5 * mag)

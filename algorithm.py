@@ -26,7 +26,8 @@ features = earthquake[
 scaler = StandardScaler()
 scaled_features = scaler.fit_transform(features)
 # lowk googled this im still not sure how this thing works
-# preetty sure it calculates the stddev and avg then scales everything around avg with the stddev≈1
+# preetty sure it calculates the stddev and avg then scales everything around avg(avg≈0) with the stddev≈1
+# the formula is (x - avg)/stddev
 
 kmeans = KMeans(n_clusters=5, random_state=42, n_init=10)
 kmeans.fit(scaled_features)
@@ -35,9 +36,11 @@ earthquake["cluster"] = kmeans.labels_
 
 
 def predict_cluster(latitude, longitude, depth, magnitude):
+    # Derived Features
     _, nearby_population = cities_within_radius(latitude, longitude)
     seismic_energy = mag2e(magnitude)
     coast_distance = signed_dist(longitude, latitude)
+    # Bev's mostly unchanged function
     input_features = [[latitude, longitude, depth, seismic_energy, coast_distance, nearby_population]]
     scaled_input = scaler.transform(input_features)
     cluster_label = kmeans.predict(scaled_input)

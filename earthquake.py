@@ -48,7 +48,7 @@ gdf = gpd.GeoSeries(
     [Point(xy) for xy in zip(earthquake["lon"], earthquake["lat"])],
     crs="EPSG:4326",
 )
-gdf_proj = gdf.to_crs(epsg=3857)
+gdf_proj = gdf.to_crs(epsg=6684)
 earthquake["x_coord"] = gdf_proj.geometry.x
 earthquake["y_coord"] = gdf_proj.geometry.y
 

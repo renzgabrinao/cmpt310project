@@ -6,6 +6,12 @@ from coast import signed_dist
 earthquake_data = load_dataset("LoneWolfgang/japan-major-earthquakes")
 earthquake = earthquake_data["train"].to_pandas()[["lat", "lon", "depthKm", "magnitude"]]
 
+# drop duplicates
+earthquake = earthquake.drop_duplicates(
+    subset=["lat", "lon", "depthKm", "magnitude"],
+    ignore_index=True
+)
+
 def cities_within_radius(lat, lon, radius_km=100):
     distances = haversine(lat, lon, cities["lat"].to_numpy(), cities["lng"].to_numpy())
     nearby_cities = cities.loc[distances <= radius_km, "city_clean"].tolist()

@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 from pathlib import Path
+import pandas as pd
 import sys
+
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
@@ -9,10 +11,12 @@ from coast import signed_dist
 from earthquake import earthquake, cities_within_radius
 from formulas import mag2e
 
+
+
 features = earthquake[
     [
-        'lat',
-        'lon',
+        'x_coord',
+        'y_coord',
         'depthKm',
         'seismic_energy',
         'coast_distance',
@@ -25,27 +29,35 @@ features = earthquake[
 
 scaler = StandardScaler()
 scaled_features = scaler.fit_transform(features)
+
+features_df = pd.DataFrame(
+    scaled_features, columns=features.columns, index=features.index
+)
 # lowk googled this im still not sure how this thing works
 # preetty sure it calculates the stddev and avg then scales everything around avg(avg≈0) with the stddev≈1
 # the formula is (x - avg)/stddev
 
-kmeans = KMeans(n_clusters=5, random_state=42, n_init=10)
-kmeans.fit(scaled_features)
+kmeans = KMeans(n_clusters=5, random_state=42)
+kmeans.fit(features_df)
 
 earthquake["cluster"] = kmeans.labels_
 
 
-def predict_cluster(latitude, longitude, depth, magnitude):
-    # Derived Features
-    _, nearby_population = cities_within_radius(latitude, longitude)
-    seismic_energy = mag2e(magnitude)
-    coast_distance = signed_dist(longitude, latitude)
-    # Bev's mostly unchanged function
-    input_features = [[latitude, longitude, depth, seismic_energy, coast_distance, nearby_population]]
-    scaled_input = scaler.transform(input_features)
-    cluster_label = kmeans.predict(scaled_input)
-    return cluster_label[0]
+# def predict_cluster(latitude, longitude, depth, magnitude):
+#     # Derived Features
+#     nearby_cities, total_population = cities_within_radius(latitude, longitude)
+#     seismic_energy = mag2e(magnitude)
+#     coast_distance = signed_dist(longitude, latitude)
 
+#     # Bev's mostly unchanged function
+#     x_coord, y_coord = get_coord(latitude, longitude)
+#     input_features = [[x_coord, y_coord, depth, seismic_energy, coast_distance, nearby_population]]
+#     scaled_input = scaler.transform(input_features)
+#     cluster_label = kmeans.predict(scaled_input)
+#     return cluster_label[0]
+
+
+# IMPORTANT : DONT NEED PREDICT CLUSTER SINCE WE'RE JUST RUNNING KMEANS ON THE DATASET(?)
 # also googled this, probably needs so much more tweaking
 
 
@@ -62,6 +74,6 @@ if __name__ == "__main__":
 
     export_clustered_earthquakes(earthquake, csv_output)
 
-    print(predict_cluster(35.0, 135.0, 10.0, 6.2))
+    # print(predict_cluster(35.0, 135.0, 10.0, 6.2))
     # test line
     print(f"Saved clustered data to {csv_output}")

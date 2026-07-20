@@ -2,6 +2,8 @@ from datasets import load_dataset
 from formulas import haversine, mag2e
 from data import cities
 from coast import signed_dist
+import geopandas as gpd
+from shapely.geometry import Point
 
 earthquake_data = load_dataset("LoneWolfgang/japan-major-earthquakes")
 earthquake = earthquake_data["train"].to_pandas()[["lat", "lon", "depthKm", "magnitude"]]
@@ -24,6 +26,31 @@ metrics = earthquake.apply(
     lambda row: cities_within_radius(row["lat"], row["lon"]),
     axis=1,
 )
+
+def get_coord(lat, lon):
+
+    point_series = gpd.GeoSeries([Point(lon, lat)], crs="EPSG:4326")
+
+    #Project to Web Mercator (EPSG:3857)
+    point_proj = point_series.to_crs(epsg=3857)
+
+    # Extract x and y coordinates as floats
+    x_coord = point_proj.geometry.x.iloc[0]
+    y_coord = point_proj.geometry.y.iloc[0]
+
+    return x_coord, y_coord
+
+
+# THE ABOVE FUNCTION IS ONLY FOR single points, for predict_cluster if we decide to keep it
+
+# Create a single GeoSeries for ALL points at once
+gdf = gpd.GeoSeries(
+    [Point(xy) for xy in zip(earthquake["lon"], earthquake["lat"])],
+    crs="EPSG:4326",
+)
+gdf_proj = gdf.to_crs(epsg=3857)
+earthquake["x_coord"] = gdf_proj.geometry.x
+earthquake["y_coord"] = gdf_proj.geometry.y
 
 earthquake["seismic_energy"] = mag2e(earthquake["magnitude"])
 earthquake["nearby_cities"] = [m[0] for m in metrics]

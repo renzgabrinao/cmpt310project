@@ -23,17 +23,20 @@ from formulas import mag2e
 
 features = earthquake[
     [
-        'lat',
-        'lon',
         'depthKm',
         'seismic_energy',
         'coast_distance',
         'total_nearby_population',
     ]
-]
+].copy()
+
+
+features["seismic_energy"] = np.log1p(features["seismic_energy"])
+features["total_nearby_population"] = np.log1p(features["total_nearby_population"])
 
 scaler = StandardScaler()
 scaled_features = scaler.fit_transform(features)
+scaled_features_weighted = scaled_features.copy()
 
 # Picking a good value for eps (one of the hyperparameters for DBSCAN)
 def plot_eps(data, k = 5):
@@ -56,8 +59,8 @@ def plot_eps(data, k = 5):
     plt.show()
 
 # Setting EPS and MinPts
-EPS = 0.09
-min_Pts = 30
+EPS = 0.6
+min_Pts = 40
 
 # Calling DBSCAN 
 dbscan = DBSCAN(eps = EPS, min_samples = min_Pts)
@@ -130,14 +133,14 @@ def compare_kmeans():
 
     # Adding a visual scatter plot to show the differences 
     fig, (plot1, plot2) = plt.subplots(1, 2, figsize = (14, 6))
-    plot1.scatter(earthquake['lon'], earthquake['lat'], c = kmeans.labels_, cmap = 'tab10', s=3)
+    plot1.scatter(earthquake['x_coord'], earthquake['y_coord'], c = kmeans.labels_, cmap = 'tab10', s=3)
     plot1.set_xlabel('Longitude')
     plot1.set_ylabel('Latitude')
     plot1.set_title('K-Means Cluster Method')
 
     noise = dbscan.labels_ == -1
-    plot2.scatter(earthquake.loc[~noise, 'lon'], earthquake.loc[~noise, 'lat'], c = dbscan.labels_[~noise], cmap = 'tab10', s=3)
-    plot2.scatter(earthquake.loc[noise, 'lon'], earthquake.loc[noise, 'lat'], c = 'lightgrey', cmap = 'tab10', s=3, label = 'Noise')
+    plot2.scatter(earthquake.loc[~noise, 'x_coord'], earthquake.loc[~noise, 'y_coord'], c = dbscan.labels_[~noise], cmap = 'tab10', s=3)
+    plot2.scatter(earthquake.loc[noise, 'x_coord'], earthquake.loc[noise, 'y_coord'], c = 'lightgrey', cmap = 'tab10', s=3, label = 'Noise')
     plot2.set_xlabel('Longitutde')
     plot2.set_ylabel('Latitude')
     plot2.set_title('DBSCAN Method')
@@ -148,7 +151,7 @@ def compare_kmeans():
 
 if __name__ == "__main__":
     # Calling plot_eps when testing to pick an optimal eps value
-    # plot_eps(scaled_features, k = 5)
+    # plot_eps(scaled_features, k = 12)
 
     output_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("data")
     csv_output = output_dir / "earthquakes_dbscan.csv"

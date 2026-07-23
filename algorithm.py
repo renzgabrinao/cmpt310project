@@ -37,7 +37,7 @@ features_df = pd.DataFrame(
 # preetty sure it calculates the stddev and avg then scales everything around avg(avg≈0) with the stddev≈1
 # the formula is (x - avg)/stddev
 
-kmeans = KMeans(n_clusters=5, random_state=42)
+kmeans = KMeans(n_clusters=4, random_state=42)
 kmeans.fit(features_df)
 
 earthquake["cluster"] = kmeans.labels_

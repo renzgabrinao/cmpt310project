@@ -32,7 +32,7 @@ def get_coord(lat, lon):
     point_series = gpd.GeoSeries([Point(lon, lat)], crs="EPSG:4326")
 
     #Project to Web Mercator (EPSG:3857)
-    point_proj = point_series.to_crs(epsg=3857)
+    point_proj = point_series.to_crs(epsg=6684)
 
     # Extract x and y coordinates as floats
     x_coord = point_proj.geometry.x.iloc[0]

@@ -15,8 +15,7 @@ from formulas import mag2e
 
 features = earthquake[
     [
-        'x_coord',
-        'y_coord',
+        # Removed x_coord and y_coord fr now
         'depthKm',
         'seismic_energy',
         'coast_distance',
@@ -36,6 +35,9 @@ features_df = pd.DataFrame(
 # lowk googled this im still not sure how this thing works
 # preetty sure it calculates the stddev and avg then scales everything around avg(avg≈0) with the stddev≈1
 # the formula is (x - avg)/stddev
+
+features_df['depthKm'] = features_df['depthKm'] * 0.3
+
 
 kmeans = KMeans(n_clusters=4, random_state=42)
 kmeans.fit(features_df)

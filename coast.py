@@ -92,7 +92,7 @@ def signed_dist(lon, lat, plot=False):
 
 if __name__ == "__main__":
     # Testing
-    print(signed_dist(139.93388366699222, 36.14829194853206, True))
+    print(signed_dist(139.93388366699222, 45.0, True))
     print(signed_dist(142, 36, True))
     # Should be able to just directly
     # from coast import signed_dist

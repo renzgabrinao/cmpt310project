@@ -23,6 +23,8 @@ from formulas import mag2e
 
 features = earthquake[
     [
+        'x_coord',
+        'y_coord',
         'depthKm',
         'seismic_energy',
         'coast_distance',

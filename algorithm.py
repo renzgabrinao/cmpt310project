@@ -16,6 +16,8 @@ from formulas import mag2e
 features = earthquake[
     [
         # Removed x_coord and y_coord fr now
+        'x_coord',
+        'y_coord',
         'depthKm',
         'seismic_energy',
         'coast_distance',
@@ -37,6 +39,13 @@ features_df = pd.DataFrame(
 # the formula is (x - avg)/stddev
 
 features_df['depthKm'] = features_df['depthKm'] * 0.3
+
+features_df['x_coord'] = features_df['x_coord'] * 0.5
+features_df['y_coord'] = features_df['y_coord'] * 0.5
+features_df['seismic_energy'] = features_df['seismic_energy'] * 0.7
+features_df['coast_distance'] = features_df['coast_distance'] * 0.6
+
+
 
 
 kmeans = KMeans(n_clusters=4, random_state=42)

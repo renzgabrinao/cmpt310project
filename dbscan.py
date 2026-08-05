@@ -147,7 +147,7 @@ def compare_kmeans():
     plot2.set_ylabel('Latitude')
     plot2.set_title('DBSCAN Method')
     plot2.legend()
-    plt.savefig('method_comparison.png', dpi = 150)
+    plt.savefig('result/method_comparison.png', dpi = 150)
     plt.show()
 
 
@@ -155,7 +155,7 @@ if __name__ == "__main__":
     # Calling plot_eps when testing to pick an optimal eps value
     # plot_eps(scaled_features, k = 12)
 
-    output_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("data")
+    output_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("result")
     csv_output = output_dir / "earthquakes_dbscan.csv"
     compare_cluster_noise()
     compare_kmeans()

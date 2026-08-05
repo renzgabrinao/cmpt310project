@@ -48,7 +48,7 @@ def plot_results(results):
     plt.xticks(results["k"])
     plt.grid(True)
     plt.tight_layout()
-    plt.savefig("kmeans_elbow.png", dpi=150)
+    plt.savefig("result/kmeans_elbow.png", dpi=150)
     plt.show()
 
     plt.figure(figsize=(8, 5))
@@ -63,7 +63,7 @@ def plot_results(results):
     plt.xticks(results["k"])
     plt.grid(True)
     plt.tight_layout()
-    plt.savefig("data/kmeans_silhouette.png", dpi=150)
+    plt.savefig("result/kmeans_silhouette.png", dpi=150)
     plt.show()
 
 
@@ -84,7 +84,7 @@ if __name__ == "__main__":
     )
 
     results.to_csv(
-        "data/kmeans_evaluation.csv",
+        "result/kmeans_evaluation.csv",
         index=False,
     )
 

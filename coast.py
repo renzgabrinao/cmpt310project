@@ -6,11 +6,6 @@ from shapely.ops import nearest_points, polygonize, unary_union
 from formulas import haversine
 
 gdf = gpd.read_file("data/coastline/coasts_per_ocean.shp")
-# print(gdf.head())
-# print(gdf.columns)
-# print(gdf.crs)
-# gdf.plot()
-# plt.show()
 
 # Useful Notes
 # EPSG:3857 often called Web Mercator, unit is in meters not degrees, good for calculating dist

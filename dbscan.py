@@ -8,16 +8,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 from pathlib import Path
 import sys
-import pandas as pd
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import DBSCAN
 from sklearn.neighbors import NearestNeighbors 
 from sklearn.metrics import silhouette_score, adjusted_rand_score
 
-from coast import signed_dist
-from earthquake import earthquake, cities_within_radius
-from formulas import mag2e
+from earthquake import earthquake
 
 # Maintaining the same features to do a comparison
 

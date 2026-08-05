@@ -1,16 +1,11 @@
-import matplotlib.pyplot as plt
 from pathlib import Path
 import pandas as pd
 import sys
 
-
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 
-from coast import signed_dist
-from earthquake import earthquake, cities_within_radius
-from formulas import mag2e
-
+from earthquake import earthquake
 
 
 features = earthquake[
@@ -24,18 +19,12 @@ features = earthquake[
     ]
 ]
 
-# train/val split here before scaling
-# However a quick google search seems to say that Unsupervised learning does not usually need a train/val split
-
 scaler = StandardScaler()
 scaled_features = scaler.fit_transform(features)
 
 features_df = pd.DataFrame(
     scaled_features, columns=features.columns, index=features.index
 )
-# lowk googled this im still not sure how this thing works
-# preetty sure it calculates the stddev and avg then scales everything around avg(avg≈0) with the stddev≈1
-# the formula is (x - avg)/stddev
 
 kmeans = KMeans(n_clusters=4, random_state=42)
 kmeans.fit(features_df)

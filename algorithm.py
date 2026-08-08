@@ -58,7 +58,7 @@ def export_clustered_earthquakes(dataframe, output_path):
     # basically just cleans up the nearby cities list so it looks nicer in the csv, also exports the data to a csv file in output dir
 
 if __name__ == "__main__":
-    output_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("results")
+    output_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("result")
     csv_output = output_dir / "earthquakes_clustered.csv"
 
     export_clustered_earthquakes(earthquake, csv_output)

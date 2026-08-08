@@ -1,3 +1,4 @@
+import numpy as np
 from datasets import load_dataset
 from formulas import haversine, mag2e
 from data import cities
@@ -61,3 +62,6 @@ earthquake["coast_distance"] = earthquake.apply(
     lambda row: signed_dist(row["lon"], row["lat"]),
     axis=1
 )
+
+# Tsunami score, a high mag earthquake offshore is more tsunami risk, while on shore pose no tsunami risk
+earthquake["tsunami_score"] = earthquake["magnitude"] * np.maximum(0, -earthquake["coast_distance"])

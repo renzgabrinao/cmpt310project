@@ -16,25 +16,17 @@ from sklearn.metrics import silhouette_score, adjusted_rand_score
 
 from earthquake import earthquake
 
+from algorithm import features
 # Maintaining the same features to do a comparison
 
-features = earthquake[
-    [
-        'x_coord',
-        'y_coord',
-        'depthKm',
-        'seismic_energy',
-        'coast_distance',
-        'total_nearby_population',
-    ]
-].copy()
+features_db = features.copy()
 
 
-features["seismic_energy"] = np.log1p(features["seismic_energy"])
-features["total_nearby_population"] = np.log1p(features["total_nearby_population"])
+features_db["seismic_energy"] = np.log1p(features_db["seismic_energy"])
+features_db["total_nearby_population"] = np.log1p(features_db["total_nearby_population"])
 
 scaler = StandardScaler()
-scaled_features = scaler.fit_transform(features)
+scaled_features = scaler.fit_transform(features_db)
 scaled_features_weighted = scaled_features.copy()
 
 # Picking a good value for eps (one of the hyperparameters for DBSCAN)

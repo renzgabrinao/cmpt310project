@@ -10,12 +10,15 @@ from earthquake import earthquake
 
 features = earthquake[
     [
-        'x_coord',
-        'y_coord',
+        # 'x_coord',
+        # 'y_coord',
         'depthKm',
-        'seismic_energy',
-        'coast_distance',
+        # 'seismic_energy',
+        'magnitude',
+        # 'coast_distance',
+        'nearby_city_count',
         'total_nearby_population',
+        'tsunami_score'
     ]
 ]
 
